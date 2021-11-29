@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/soyeon/catkin_ws/src/LaneNetRos/model/tusimple_lanenet/tusimple_lanenet.ckpt"
+

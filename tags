@@ -1,0 +1,188 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BiseNetV2	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class BiseNetV2(cnn_basenet.CNNBaseModel):$/;"	c
+CFG	scripts/lanenet_ros_node.py	/^CFG = parse_config_utils.lanenet_cfg$/;"	v
+CFG	scripts/lanenet_ros_node2.py	/^CFG = parse_config_utils.lanenet_cfg$/;"	v
+CFG	scripts/lanenet_ros_o.py	/^CFG = parse_config_utils.lanenet_cfg$/;"	v
+CFG	scripts/local_utils/log_util/init_logger.py	/^CFG = parse_config_utils.lanenet_cfg$/;"	v
+CNNBaseModel	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^class CNNBaseModel(object):$/;"	c
+Config	scripts/local_utils/config_utils/parse_config_utils.py	/^class Config(dict):$/;"	c
+LOG	scripts/lanenet_ros_node.py	/^LOG = init_logger.get_logger(log_file_name_prefix='lanenet_test')$/;"	v
+LOG	scripts/lanenet_ros_node2.py	/^LOG = init_logger.get_logger(log_file_name_prefix='lanenet_test')$/;"	v
+LOG	scripts/lanenet_ros_o.py	/^LOG = init_logger.get_logger(log_file_name_prefix='lanenet_test')$/;"	v
+LaneNet	scripts/lanenet_model/lanenet.py	/^class LaneNet(cnn_basenet.CNNBaseModel):$/;"	c
+LaneNetBackEnd	scripts/lanenet_model/lanenet_back_end.py	/^class LaneNetBackEnd(cnn_basenet.CNNBaseModel):$/;"	c
+LaneNetFrondEnd	scripts/lanenet_model/lanenet_front_end.py	/^class LaneNetFrondEnd(cnn_basenet.CNNBaseModel):$/;"	c
+LaneNetPostProcessor	scripts/lanenet_model/lanenet_postprocess.py	/^class LaneNetPostProcessor(object):$/;"	c
+VGG16FCN	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^class VGG16FCN(cnn_basenet.CNNBaseModel):$/;"	c
+_ContextEmbedding	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class _ContextEmbedding(cnn_basenet.CNNBaseModel):$/;"	c
+_GatherExpansion	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class _GatherExpansion(cnn_basenet.CNNBaseModel):$/;"	c
+_GuidedAggregation	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class _GuidedAggregation(cnn_basenet.CNNBaseModel):$/;"	c
+_LaneFeat	scripts/lanenet_model/lanenet_postprocess.py	/^class _LaneFeat(object):$/;"	c
+_LaneNetCluster	scripts/lanenet_model/lanenet_postprocess.py	/^class _LaneNetCluster(object):$/;"	c
+_SegmentationHead	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class _SegmentationHead(cnn_basenet.CNNBaseModel):$/;"	c
+_StemBlock	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^class _StemBlock(cnn_basenet.CNNBaseModel):$/;"	c
+__call__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:_ContextEmbedding	file:
+__call__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:_GatherExpansion	file:
+__call__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:_GuidedAggregation	file:
+__call__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:_SegmentationHead	file:
+__call__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:_StemBlock	file:
+__getattr__	scripts/local_utils/config_utils/parse_config_utils.py	/^    def __getattr__(self, key, create_if_not_exist=True):$/;"	m	class:Config	file:
+__init__	scripts/lanenet_model/lanenet.py	/^    def __init__(self, phase, cfg):$/;"	m	class:LaneNet
+__init__	scripts/lanenet_model/lanenet_back_end.py	/^    def __init__(self, phase, cfg):$/;"	m	class:LaneNetBackEnd
+__init__	scripts/lanenet_model/lanenet_front_end.py	/^    def __init__(self, phase, net_flag, cfg):$/;"	m	class:LaneNetFrondEnd
+__init__	scripts/lanenet_model/lanenet_postprocess.py	/^    def __init__(self, cfg):$/;"	m	class:_LaneNetCluster
+__init__	scripts/lanenet_model/lanenet_postprocess.py	/^    def __init__(self, cfg, ipm_remap_file_path='\/aveesSSD\/lanenet-lane-detection\/data\/tusimple_ipm_remap.yml'):$/;"	m	class:LaneNetPostProcessor
+__init__	scripts/lanenet_model/lanenet_postprocess.py	/^    def __init__(self, feat, coord, class_id=-1):$/;"	m	class:_LaneFeat
+__init__	scripts/lanenet_ros_node.py	/^    def __init__(self):$/;"	m	class:lanenet_detector
+__init__	scripts/lanenet_ros_node2.py	/^    def __init__(self):$/;"	m	class:lanenet_detector
+__init__	scripts/lanenet_ros_o.py	/^    def __init__(self):$/;"	m	class:lanenet_detector
+__init__	scripts/local_utils/config_utils/parse_config_utils.py	/^    def __init__(self, *args, **kwargs):$/;"	m	class:Config
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase):$/;"	m	class:_ContextEmbedding
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase):$/;"	m	class:_GatherExpansion
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase):$/;"	m	class:_GuidedAggregation
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase):$/;"	m	class:_SegmentationHead
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase):$/;"	m	class:_StemBlock
+__init__	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def __init__(self, phase, cfg):$/;"	m	class:BiseNetV2
+__init__	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def __init__(self):$/;"	m	class:CNNBaseModel
+__init__	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def __init__(self, phase, cfg):$/;"	m	class:VGG16FCN
+__setattr__	scripts/local_utils/config_utils/parse_config_utils.py	/^    def __setattr__(self, key, value, create_if_not_exist=True):$/;"	m	class:Config	file:
+__setitem__	scripts/local_utils/config_utils/parse_config_utils.py	/^    def __setitem__(self, key, value):$/;"	m	class:Config	file:
+_apply_ge_when_stride_equal_one	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _apply_ge_when_stride_equal_one(self, input_tensor, e, name):$/;"	m	class:_GatherExpansion
+_apply_ge_when_stride_equal_two	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _apply_ge_when_stride_equal_two(self, input_tensor, output_channels, e, name):$/;"	m	class:_GatherExpansion
+_build_detail_branch_hyper_params	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _build_detail_branch_hyper_params(cls):$/;"	m	class:BiseNetV2
+_build_semantic_branch_hyper_params	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _build_semantic_branch_hyper_params(self):$/;"	m	class:BiseNetV2
+_compute_class_weighted_cross_entropy_loss	scripts/lanenet_model/lanenet_back_end.py	/^    def _compute_class_weighted_cross_entropy_loss(cls, onehot_labels, logits, classes_weights):$/;"	m	class:LaneNetBackEnd
+_connect_components_analysis	scripts/lanenet_model/lanenet_postprocess.py	/^def _connect_components_analysis(image):$/;"	f
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:BiseNetV2
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:_ContextEmbedding
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:_GatherExpansion
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:_GuidedAggregation
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:_SegmentationHead
+_conv_block	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _conv_block(self, input_tensor, k_size, output_channels, stride,$/;"	m	class:_StemBlock
+_decode_block	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def _decode_block(self, input_tensor, previous_feats_tensor,$/;"	m	class:VGG16FCN
+_embedding_feats_dbscan_cluster	scripts/lanenet_model/lanenet_postprocess.py	/^    def _embedding_feats_dbscan_cluster(self, embedding_image_feats):$/;"	m	class:_LaneNetCluster
+_get_lane_embedding_feats	scripts/lanenet_model/lanenet_postprocess.py	/^    def _get_lane_embedding_feats(binary_seg_ret, instance_seg_ret):$/;"	m	class:_LaneNetCluster
+_is_net_for_training	scripts/lanenet_model/lanenet_back_end.py	/^    def _is_net_for_training(self):$/;"	m	class:LaneNetBackEnd
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:BiseNetV2
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:_ContextEmbedding
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:_GatherExpansion
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:_GuidedAggregation
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:_SegmentationHead
+_is_net_for_training	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def _is_net_for_training(self):$/;"	m	class:_StemBlock
+_is_net_for_training	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def _is_net_for_training(self):$/;"	m	class:VGG16FCN
+_load_config_file	scripts/local_utils/config_utils/parse_config_utils.py	/^    def _load_config_file(config_file_path):$/;"	m	class:Config
+_load_remap_matrix	scripts/lanenet_model/lanenet_postprocess.py	/^    def _load_remap_matrix(self):$/;"	m	class:LaneNetPostProcessor
+_morphological_process	scripts/lanenet_model/lanenet_postprocess.py	/^def _morphological_process(image, kernel_size=5): # to denoise binary line$/;"	f
+_multi_category_focal_loss	scripts/lanenet_model/lanenet_back_end.py	/^    def _multi_category_focal_loss(cls, onehot_labels, logits, classes_weights, gamma=2.0):$/;"	m	class:LaneNetBackEnd
+_vgg16_conv_stage	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def _vgg16_conv_stage(self, input_tensor, k_size, out_dims, name,$/;"	m	class:VGG16FCN
+_vgg16_fcn_decode	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def _vgg16_fcn_decode(self, name):$/;"	m	class:VGG16FCN
+_vgg16_fcn_encode	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def _vgg16_fcn_encode(self, input_tensor, name):$/;"	m	class:VGG16FCN
+apply_lane_feats_cluster	scripts/lanenet_model/lanenet_postprocess.py	/^    def apply_lane_feats_cluster(self, binary_seg_result, instance_seg_result):$/;"	m	class:_LaneNetCluster
+avgpooling	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def avgpooling(inputdata, kernel_size, stride=None, padding='VALID',$/;"	m	class:CNNBaseModel
+batch_size	scripts/local_utils/config_utils/parse_config_utils.py	/^    batch_size = cityscapes_cfg_v2.TRAIN.BATCH_SIZE$/;"	v	class:Config
+bin_img	scripts/test2.py	/^bin_img = cv2.imread('\/aveesSSD\/cap0010.png')$/;"	v
+bin_img	scripts/test2.py	/^bin_img = np.array(bin_img, np.uint8)$/;"	v
+blue	scripts/test.py	/^blue = (255,0,0)$/;"	v
+body	scripts/lanenet_model/lanenet_discriminative_loss.py	/^    def body(label, batch, out_loss, out_var, out_dist, out_reg, i):$/;"	f	function:discriminative_loss
+build_aggregation_branch	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_aggregation_branch(self, detail_output, semantic_output, name):$/;"	m	class:BiseNetV2
+build_binary_segmentation_branch	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_binary_segmentation_branch(self, input_tensor, name):$/;"	m	class:BiseNetV2
+build_detail_branch	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_detail_branch(self, input_tensor, name):$/;"	m	class:BiseNetV2
+build_instance_segmentation_branch	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_instance_segmentation_branch(self, input_tensor, name):$/;"	m	class:BiseNetV2
+build_model	scripts/lanenet_model/lanenet_front_end.py	/^    def build_model(self, input_tensor, name, reuse):$/;"	m	class:LaneNetFrondEnd
+build_model	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_model(self, input_tensor, name, reuse=False):$/;"	m	class:BiseNetV2
+build_model	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    def build_model(self, input_tensor, name, reuse=False):$/;"	m	class:VGG16FCN
+build_semantic_branch	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    def build_semantic_branch(self, input_tensor, name, prepare_data_for_booster=False):$/;"	m	class:BiseNetV2
+check_and_infer	scripts/local_utils/config_utils/parse_config_utils.py	/^    def check_and_infer(self):$/;"	m	class:Config
+cir1_img	scripts/test.py	/^cir1_img = cv2.circle(copy.deepcopy(cir_img), (256,10),100, 255, 2)$/;"	v
+cir2_img	scripts/test.py	/^cir2_img = cv2.circle(copy.deepcopy(cir_img), (256,10),200, 255, 2)$/;"	v
+cir_img	scripts/test.py	/^cir_img = np.zeros([256,512])$/;"	v
+class_id	scripts/lanenet_model/lanenet_postprocess.py	/^    def class_id(self):$/;"	m	class:_LaneFeat
+class_id	scripts/lanenet_model/lanenet_postprocess.py	/^    def class_id(self, value):$/;"	m	class:_LaneFeat
+compute_loss	scripts/lanenet_model/lanenet.py	/^    def compute_loss(self, input_tensor, binary_label, instance_label, name, reuse=False):$/;"	m	class:LaneNet
+compute_loss	scripts/lanenet_model/lanenet_back_end.py	/^    def compute_loss(self, binary_seg_logits, binary_label,$/;"	m	class:LaneNetBackEnd
+cond	scripts/lanenet_model/lanenet_discriminative_loss.py	/^    def cond(label, batch, out_loss, out_var, out_dist, out_reg, i):$/;"	f	function:discriminative_loss
+conv2d	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def conv2d(inputdata, out_channel, kernel_size, padding='SAME',$/;"	m	class:CNNBaseModel
+coord	scripts/lanenet_model/lanenet_postprocess.py	/^    def coord(self):$/;"	m	class:_LaneFeat
+coord	scripts/lanenet_model/lanenet_postprocess.py	/^    def coord(self, value):$/;"	m	class:_LaneFeat
+deconv2d	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def deconv2d(inputdata, out_channel, kernel_size, padding='SAME',$/;"	m	class:CNNBaseModel
+depthwise_conv	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def depthwise_conv(input_tensor, kernel_size, name, depth_multiplier=1,$/;"	m	class:CNNBaseModel
+dilation_conv	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def dilation_conv(input_tensor, k_size, out_dims, rate, padding='SAME',$/;"	m	class:CNNBaseModel
+discriminative_loss	scripts/lanenet_model/lanenet_discriminative_loss.py	/^def discriminative_loss(prediction, correct_label, feature_dim, image_shape,$/;"	f
+discriminative_loss_single	scripts/lanenet_model/lanenet_discriminative_loss.py	/^def discriminative_loss_single($/;"	f
+dropout	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def dropout(inputdata, keep_prob, noise_shape=None, name=None):$/;"	m	class:CNNBaseModel
+dump_to_json_file	scripts/local_utils/config_utils/parse_config_utils.py	/^    def dump_to_json_file(self, f_obj):$/;"	m	class:Config
+enable_miou	scripts/local_utils/config_utils/parse_config_utils.py	/^    enable_miou = cityscapes_cfg_v2.TRAIN.COMPUTE_MIOU.ENABLE$/;"	v	class:Config
+f1	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^        def f1():$/;"	f	function:CNNBaseModel.spatial_dropout
+f2	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^        def f2():$/;"	f	function:CNNBaseModel.spatial_dropout
+feat	scripts/lanenet_model/lanenet_postprocess.py	/^    def feat(self):$/;"	m	class:_LaneFeat
+feat	scripts/lanenet_model/lanenet_postprocess.py	/^    def feat(self, value):$/;"	m	class:_LaneFeat
+feed_dict	scripts/lanenet_ros_node.py	/^				feed_dict={self.input_tensor: [img]}$/;"	v	class:lanenet_detector
+fullyconnect	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def fullyconnect(inputdata, out_dim, w_init=None, b_init=None,$/;"	m	class:CNNBaseModel
+get_logger	scripts/local_utils/log_util/init_logger.py	/^def get_logger(log_file_name_prefix):$/;"	f
+globalavgpooling	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def globalavgpooling(inputdata, data_format='NHWC', name=None):$/;"	m	class:CNNBaseModel
+idx	scripts/test2.py	/^idx = np.where(bin_img == 255)$/;"	v
+img_callback	scripts/lanenet_ros_node.py	/^    def img_callback(self, data):$/;"	m	class:lanenet_detector
+img_callback	scripts/lanenet_ros_node2.py	/^    def img_callback(self, data):$/;"	m	class:lanenet_detector
+img_callback	scripts/lanenet_ros_o.py	/^    def img_callback(self, data):$/;"	m	class:lanenet_detector
+inference	scripts/lanenet_model/lanenet.py	/^    def inference(self, input_tensor, name, reuse=False):$/;"	m	class:LaneNet
+inference	scripts/lanenet_model/lanenet_back_end.py	/^    def inference(self, binary_seg_logits, instance_seg_logits, name, reuse):$/;"	m	class:LaneNetBackEnd
+inference_net	scripts/lanenet_ros_o.py	/^    def inference_net(self, img, original_img):$/;"	m	class:lanenet_detector
+init_lanenet	scripts/lanenet_ros_node.py	/^    def init_lanenet(self):$/;"	m	class:lanenet_detector
+init_lanenet	scripts/lanenet_ros_node2.py	/^    def init_lanenet(self):$/;"	m	class:lanenet_detector
+init_lanenet	scripts/lanenet_ros_o.py	/^    def init_lanenet(self):$/;"	m	class:lanenet_detector
+inst_img	scripts/test2.py	/^inst_img = cv2.imread('\/aveesSSD\/cap014.png')$/;"	v
+instancenorm	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def instancenorm(inputdata, epsilon=1e-5, data_format='NHWC', use_affine=True, name=None):$/;"	m	class:CNNBaseModel
+is_immutable	scripts/local_utils/config_utils/parse_config_utils.py	/^    def is_immutable(self):$/;"	m	class:Config
+lane_coord	scripts/test2.py	/^lane_coord = np.vstack((idx[1],idx[0])).transpose()$/;"	v
+lane_feats	scripts/test2.py	/^lane_feats = inst_img[idx]$/;"	v
+lanenet_cfg	scripts/local_utils/config_utils/parse_config_utils.py	/^lanenet_cfg = Config(config_path='\/aveesSSD\/lanenet-lane-detection\/config\/tusimple_lanenet.yaml')$/;"	v
+lanenet_detector	scripts/lanenet_ros_node.py	/^class lanenet_detector():$/;"	c
+lanenet_detector	scripts/lanenet_ros_node2.py	/^class lanenet_detector():$/;"	c
+lanenet_detector	scripts/lanenet_ros_o.py	/^class lanenet_detector():$/;"	c
+layerbn	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def layerbn(inputdata, is_training, name, scale=True):$/;"	m	class:CNNBaseModel
+layergn	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def layergn(inputdata, name, group_size=32, esp=1e-5):$/;"	m	class:CNNBaseModel
+layernorm	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def layernorm(inputdata, epsilon=1e-5, use_bias=True, use_scale=True,$/;"	m	class:CNNBaseModel
+lrelu	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def lrelu(inputdata, name, alpha=0.2):$/;"	m	class:CNNBaseModel
+maxpooling	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def maxpooling(inputdata, kernel_size, stride=None, padding='VALID',$/;"	m	class:CNNBaseModel
+model	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    model = BiseNetV2(phase='train', cfg=parse_config_utils.lanenet_cfg)$/;"	v	class:BiseNetV2
+model	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    model = VGG16FCN(phase='train', cfg=parse_config_utils.lanenet_cfg)$/;"	v
+model	scripts/test.py	/^model = DBSCAN(eps=3, min_samples=2).fit(s_img_xy)$/;"	v
+model_1	scripts/test.py	/^model_1 = DBSCAN(eps=3, min_samples=2).fit(w_img1_xy)$/;"	v
+model_2	scripts/test.py	/^model_2 = DBSCAN(eps=3, min_samples=2).fit(w_img2_xy)$/;"	v
+model_save_dir	scripts/local_utils/config_utils/parse_config_utils.py	/^    model_save_dir = cityscapes_cfg_v2.TRAIN.MODEL_SAVE_DIR$/;"	v	class:Config
+postprocess	scripts/lanenet_model/lanenet_postprocess.py	/^    def postprocess(self, binary_seg_result, instance_seg_result=None, ## cost time is about 0.1s$/;"	m	class:LaneNetPostProcessor
+postprocessing	scripts/lanenet_ros_node.py	/^    def postprocessing(self, img, original_img):    #inference_net$/;"	m	class:lanenet_detector
+postprocessing	scripts/lanenet_ros_node2.py	/^    def postprocessing(self, img, original_img):    #inference_net$/;"	m	class:lanenet_detector
+preprocessing	scripts/lanenet_ros_node.py	/^    def preprocessing(self, img):$/;"	m	class:lanenet_detector
+preprocessing	scripts/lanenet_ros_node2.py	/^    def preprocessing(self, img):$/;"	m	class:lanenet_detector
+preprocessing	scripts/lanenet_ros_o.py	/^    def preprocessing(self, img):$/;"	m	class:lanenet_detector
+relu	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def relu(inputdata, name=None):$/;"	m	class:CNNBaseModel
+ret	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    ret = model.build_model(test_in_tensor, name='bisenetv2')$/;"	v	class:BiseNetV2
+ret	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    ret = model.build_model(test_in_tensor, name='vgg16fcn')$/;"	v
+s_img_xy	scripts/test.py	/^s_img_xy = np.c_[s_img_x,s_img_y]$/;"	v
+set_immutable	scripts/local_utils/config_utils/parse_config_utils.py	/^    def set_immutable(self, immutable):$/;"	m	class:Config
+sigmoid	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def sigmoid(inputdata, name=None):$/;"	m	class:CNNBaseModel
+snapshot_epoch	scripts/local_utils/config_utils/parse_config_utils.py	/^    snapshot_epoch = cityscapes_cfg_v2.TRAIN.SNAPSHOT_EPOCH$/;"	v	class:Config
+source_img	scripts/test.py	/^source_img = cv2.imread('\/aveesSSD\/cap001.png')$/;"	v
+source_img	scripts/test.py	/^source_img = np.array(source_img[:,:,1])$/;"	v
+spatial_dropout	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def spatial_dropout(input_tensor, keep_prob, is_training, name, seed=1234):$/;"	m	class:CNNBaseModel
+squeeze	scripts/semantic_segmentation_zoo/cnn_basenet.py	/^    def squeeze(inputdata, axis=None, name=None):$/;"	m	class:CNNBaseModel
+test_in_tensor	scripts/semantic_segmentation_zoo/bisenet_v2.py	/^    test_in_tensor = tf.placeholder(dtype=tf.float32, shape=[1, 256, 512, 3], name='input')$/;"	v	class:BiseNetV2
+test_in_tensor	scripts/semantic_segmentation_zoo/vgg16_based_fcn.py	/^    test_in_tensor = tf.placeholder(dtype=tf.float32, shape=[1, 256, 512, 3], name='input')$/;"	v
+train_epoch_nums	scripts/local_utils/config_utils/parse_config_utils.py	/^    train_epoch_nums = cityscapes_cfg_v2.TRAIN.EPOCH_NUMS$/;"	v	class:Config
+u_labels_1	scripts/test.py	/^u_labels_1 = np.unique(model_1.labels_)$/;"	v
+update_from_config	scripts/local_utils/config_utils/parse_config_utils.py	/^    def update_from_config(self, other):$/;"	m	class:Config
+update_from_file	scripts/local_utils/config_utils/parse_config_utils.py	/^    def update_from_file(self, config_file):$/;"	m	class:Config
+update_from_list	scripts/local_utils/config_utils/parse_config_utils.py	/^    def update_from_list(self, config_list):$/;"	m	class:Config
+w_img1	scripts/test.py	/^w_img1 = np.where(w_img1 > 256, w_img1, 0)$/;"	v
+w_img1	scripts/test.py	/^w_img1 = source_img + cir1_img$/;"	v
+w_img1_xy	scripts/test.py	/^w_img1_xy = np.c_[w_img1_x,w_img1_y]$/;"	v
+w_img2	scripts/test.py	/^w_img2 = np.where(w_img2 > 256, w_img2, 0)$/;"	v
+w_img2	scripts/test.py	/^w_img2 = source_img + cir2_img$/;"	v
+w_img2_xy	scripts/test.py	/^w_img2_xy = np.c_[w_img2_x,w_img2_y]$/;"	v
+white	scripts/test.py	/^white = (255,255,255)$/;"	v
