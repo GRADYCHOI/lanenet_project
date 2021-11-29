@@ -120,15 +120,15 @@ class lanenet_detector():
             img_np = cv2.addWeighted(img_np, 0.6, img_np2, 0.5, 0)
     	img_np2 = img_np.copy()
     	img_np2 = copy_img.copy()
-    	cv2.imshow("roi", resized_image)
+#    	cv2.imshow("roi", resized_image)
 #---------------------------------------
     	#mask_image = self.postprocessing(resized_image, original_img)
     	mask_image = self.postprocessing(resized_image, cv_image)
-#    	if count % 3 == 0:
-#            cv2.imwrite("/home/choiin/image1/%d.jpg" %num, original_img)
-##            cv2.imwrite("/home/choiin/image1/jungchub%d.jpg" %num, resized_image)
-#            num = num+1 
-    	imagepublish = self.image_publish(mask_image)
+    	if count % 3 == 0:
+            cv2.imwrite("/home/choiin/original_frame/%d.jpg" %num, original_img)
+            cv2.imwrite("/home/choiin/superposition_frame/%d.jpg" %num, resized_image)
+            num = num+1 
+#    	imagepublish = self.image_publish(mask_image)
         
 
 
@@ -172,15 +172,15 @@ class lanenet_detector():
         mask_image2 = mask_image
         mask_image = np.append(mask_image, mask_image2, axis = 2)
         mask_image = np.append(mask_image, mask_image2, axis = 2)
-#        binary_image = mask_image.copy()
-#        if count % 3 == 0 :
-#            cv2.imwrite("/home/choiin/image2/%d.jpg" %num, mask_image)
+        binary_image = mask_image.copy()
+        if count % 3 == 0 :
+            cv2.imwrite("/home/choiin/superposition_binary_frame/%d.jpg" %num, mask_image)
         mask_image = cv2.addWeighted(original_img, 0.6, mask_image, 0.4, 0) # orgin + mask(lane)
         cv2.waitKey(1)
-        print(mask_image.shape, type(mask_image))
+        #print(mask_image.shape, type(mask_image))
 #        dt_ms = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
 #        print(dt_ms)
-        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
+#        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
         return mask_image
 
 #        #print binary image
