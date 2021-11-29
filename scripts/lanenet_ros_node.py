@@ -112,15 +112,15 @@ class lanenet_detector():
     	#cv2.imshow("cv", cv_image)
 #---------------resize sup---------------
     	resized_image = self.preprocessing(cv_image)
-#    	if count > 3 :
-#            resized_image = cv2.addWeighted(resized_image, 0.6, img_np, 0.5, 0)
-#    	img_np = resized_image.copy()
-#    	#copy_img = img_np.copy()
-#    	if count > 2 :
-#            img_np = cv2.addWeighted(img_np, 0.6, img_np2, 0.5, 0)
-#    	img_np2 = img_np.copy()
-#    	#img_np2 = copy_img.copy()
-#    	cv2.imshow("roi", resized_image)
+    	if count > 3 :
+            resized_image = cv2.addWeighted(resized_image, 0.6, img_np, 0.5, 0)
+    	img_np = resized_image.copy()
+    	copy_img = img_np.copy()
+    	if count > 2 :
+            img_np = cv2.addWeighted(img_np, 0.6, img_np2, 0.5, 0)
+    	img_np2 = img_np.copy()
+    	img_np2 = copy_img.copy()
+    	cv2.imshow("roi", resized_image)
 #---------------------------------------
     	#mask_image = self.postprocessing(resized_image, original_img)
     	mask_image = self.postprocessing(resized_image, cv_image)
@@ -180,7 +180,7 @@ class lanenet_detector():
         print(mask_image.shape, type(mask_image))
 #        dt_ms = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
 #        print(dt_ms)
-#        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
+        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
         return mask_image
 
 #        #print binary image
