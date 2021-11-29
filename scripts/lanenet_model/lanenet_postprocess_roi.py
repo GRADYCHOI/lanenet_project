@@ -11,13 +11,16 @@ LaneNet model post process
 import os.path as ops
 import math
 import time
+from PIL import Image
 
 import cv2
 import glog as log
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import RobustScaler 
+import matplotlib.pyplot as plt # in
+import seaborn as sns # in
 
 np.set_printoptions(threshold=np.inf)
 
@@ -165,10 +168,10 @@ class _LaneNetCluster(object):
         """
         db = DBSCAN(eps=self._cfg.POSTPROCESS.DBSCAN_EPS, min_samples=self._cfg.POSTPROCESS.DBSCAN_MIN_SAMPLES)
         try:
-            features = StandardScaler().fit_transform(embedding_image_feats) 
+            features = StandardScaler().fit_transform(embedding_image_feats)  #preprocessing before clustering
 #            print(embedding_image_feats)
-            t_start = time.time()
-            db.fit(features) # consume many time
+#            t_start = time.time()
+            db.fit(features) # consume many time here jojeo
 #            print('db.fit(), cost time : {:.5f}s'.format(time.time() - t_start))
         except Exception as err:
             log.error(err)
@@ -180,12 +183,12 @@ class _LaneNetCluster(object):
                 'cluster_center': None
             }
             return ret
-        db_labels = db.labels_
-        unique_labels = np.unique(db_labels)
-
+        db_labels = db.labels_ 
+        unique_labels = np.unique(db_labels) # -1 0 1 2
         num_clusters = len(unique_labels)
         cluster_centers = db.components_
-
+        
+        
 #        print(db_labels)
         ret = {
             'origin_features': features,
@@ -205,13 +208,13 @@ class _LaneNetCluster(object):
         :param instance_seg_ret:
         :return:
         """
-        idx = np.where(binary_seg_ret == 255) # binary_img's white fixel
-        lane_embedding_feats = instance_seg_ret[idx] # fixel value
+        idx = np.where(binary_seg_ret == 255) # search binary_img's white fixel
+        lane_embedding_feats = instance_seg_ret[idx] # fixel value, shape = (XXXX, 4) ex) (7915, 4) 
 #        print(idx) #format:(arr(),arr())
         # idx_scale = np.vstack((idx[0] / 256.0, idx[1] / 512.0)).transpose()
         # lane_embedding_feats = np.hstack((lane_embedding_feats, idx_scale))
-        lane_coordinate = np.vstack((idx[1], idx[0])).transpose() # coordi
-
+        lane_coordinate = np.vstack((idx[1], idx[0])).transpose() # pixel coordi
+        # lane_embedding_feats, lane_coordinate = lane pixel array
         assert lane_embedding_feats.shape[0] == lane_coordinate.shape[0]
 
         ret = {
@@ -235,29 +238,26 @@ class _LaneNetCluster(object):
         )
 
         # dbscan cluster
-        #print(get_lane_embedding_feats_result['lane_embedding_feats'])
         dbscan_cluster_result = self._embedding_feats_dbscan_cluster(
             embedding_image_feats=get_lane_embedding_feats_result['lane_embedding_feats']
         )
-
-        mask = np.zeros(shape=[binary_seg_result.shape[0], binary_seg_result.shape[1], 3], dtype=np.uint8)
+        mask = np.zeros(shape=[binary_seg_result.shape[0], binary_seg_result.shape[1], 3], dtype=np.uint8)#shape=256X512X3
         db_labels = dbscan_cluster_result['db_labels']
         unique_labels = dbscan_cluster_result['unique_labels']
         coord = get_lane_embedding_feats_result['lane_coordinates']
 
         if db_labels is None:
             return None, None
-
         lane_coords = []
 
-        for index, label in enumerate(unique_labels.tolist()):
+        for index, label in enumerate(unique_labels.tolist()): # index = lane id(use color map),   label = image RGB?
+            # print(index, label)
             if label == -1:
                 continue
-            idx = np.where(db_labels == label)
+            idx = np.where(db_labels == label) 
             pix_coord_idx = tuple((coord[idx][:, 1], coord[idx][:, 0]))
-            mask[pix_coord_idx] = self._color_map[index]
+            mask[pix_coord_idx] = self._color_map[index] #draw color
             lane_coords.append(coord[idx])
-
 
         return mask, lane_coords
 
@@ -322,17 +322,20 @@ class LaneNetPostProcessor(object):
         :param data_source:
         :return:
         """
-        # convert binary_seg_result
+        #convert binary_seg_result
+        #cv2.imshow("bin1", binary_seg_result)
         binary_seg_result = np.array(binary_seg_result * 255, dtype=np.uint8)
+        #cv2.imshow("bin2", binary_seg_result)
 
-#        # zero vanishing point
+#        zero vanishing point
 #        binary_seg_result = cv2.circle(binary_seg_result, (230,40), 30, 0, -1)
 #        dd
 
 
         # apply image morphology operation to fill in the hold and reduce the small area
         morphological_ret = _morphological_process(binary_seg_result, kernel_size=4) # to denoise binary image
-
+#        #cv2.imshow("bin", morphological_ret)
+#
         connect_components_analysis_ret = _connect_components_analysis(image=morphological_ret)
         # c_c_a_r[0]:retval,the num of obj, [1]:labels, [2]:stats Nx5 mat, [3]:centroids
         labels = connect_components_analysis_ret[1]
@@ -341,69 +344,65 @@ class LaneNetPostProcessor(object):
             if stat[4] <= min_area_threshold: # area : stats[x,y,w,h,area] have 5 elements
                 idx = np.where(labels == index)
                 morphological_ret[idx] = 0  # some task to morphological_ret
+#
+#        white = (255,255,255)
+#        cir_img = np.zeros([256,512])
+#        cir_img = cv2.circle(cir_img, (256,10), 200, 255, 2)
+#
+#        w_img = morphological_ret + cir_img
+#        w_img = np.where(w_img > 256, w_img, 0)
 
-        white = (255,255,255)
-        cir_img = np.zeros([256,512])
-        cir_img = cv2.circle(cir_img, (256,10), 200, 255, 2)
-
-        w_img = morphological_ret + cir_img
-        w_img = np.where(w_img > 256, w_img, 0)
-
-
-
-#        cv2.imshow("post_bin_img",morphological_ret)
-#        cv2.imshow("post_cir_img",cir_img)
-#        cv2.imshow("post_w_img",w_img)
         cv2.waitKey(1)
-
-
-
+#
+#
+#
         # apply embedding features cluster
+        t_start = time.time()
+        # very slow~~~~~~~~~~~ 0.8 ~ 1 s
         mask_image, lane_coords = self._cluster.apply_lane_feats_cluster(
             binary_seg_result=morphological_ret,
             instance_seg_result=instance_seg_result
         )
-#        print(lane_coords)
-
+#       print(lane_coords)
         if mask_image is None:
             return {
                 'mask_image': None,
                 'fit_params': None,
                 'source_image': None,
             }
+#       # print('mask image make cost tiome : {:.5f}s'.format(time.time() - t_start))
 
-        # lane line fit
-#        t_start = time.time()
+        # lane line fit, if remove that little  fast.
         fit_params = []
         src_lane_pts = []  # lane pts every single lane
-        for lane_index, coords in enumerate(lane_coords):
+        for lane_index, coords in enumerate(lane_coords):   # for with index & coords
             if data_source == 'tusimple':
-                tmp_mask = np.zeros(shape=(720, 1280), dtype=np.uint8)
+                tmp_mask = np.zeros(shape=(720, 1280), dtype=np.uint8) # fill zero 
                 tmp_mask[tuple((np.int_(coords[:, 1] * 720 / 256), np.int_(coords[:, 0] * 1280 / 512)))] = 255
 #                tmp_mask = np.zeros(shape=(480, 640), dtype=np.uint8)
 #                tmp_mask[tuple((np.int_(coords[:, 1] * 480 / 256), np.int_(coords[:, 0] * 640 / 512)))] = 255
             else:
-                raise ValueError('Wrong data source now only support tusimple')
+                raise ValueError('Wrong data source now only support tusimple') # X
             tmp_ipm_mask = cv2.remap(
                 tmp_mask,
                 self._remap_to_ipm_x,
                 self._remap_to_ipm_y,
                 interpolation=cv2.INTER_NEAREST
-            )
+            ) # input = tmp_mask, ipmx, ipmy = reference coords of output
             nonzero_y = np.array(tmp_ipm_mask.nonzero()[0])
             nonzero_x = np.array(tmp_ipm_mask.nonzero()[1])
 #            print(nonzero_y)
 #            print(nonzero_x)
-
+#
             fit_param = np.polyfit(nonzero_y, nonzero_x, 2)
             fit_params.append(fit_param)
-
+#
             [ipm_image_height, ipm_image_width] = tmp_ipm_mask.shape
             plot_y = np.linspace(10, ipm_image_height, ipm_image_height - 10)
 #            print(len(plot_y))
             fit_x = fit_param[0] * plot_y ** 2 + fit_param[1] * plot_y + fit_param[2]
             # fit_x = fit_param[0] * plot_y ** 3 + fit_param[1] * plot_y ** 2 + fit_param[2] * plot_y + fit_param[3]
-
+#
             lane_pts = []
             for index in range(0, plot_y.shape[0], 5):
                 src_x = self._remap_to_ipm_x[
@@ -413,16 +412,18 @@ class LaneNetPostProcessor(object):
                 src_y = self._remap_to_ipm_y[
                     int(plot_y[index]), int(np.clip(fit_x[index], 0, ipm_image_width - 1))]
                 src_y = src_y if src_y > 0 else 0
-
+#
                 lane_pts.append([src_x, src_y])
-
+#
             src_lane_pts.append(lane_pts)
-
+#
         # tusimple test data sample point along y axis every 10 pixels
         source_image_width = source_image.shape[1]
 #        print(src_lane_pts) # all lane points
 #        print('postprocess 1, cost tiome : {:.5f}s'.format(time.time() - t_start))
 #        t_start = time.time()
+#
+#        # make coords point
         for index, single_lane_pts in enumerate(src_lane_pts):
             single_lane_pt_x = np.array(single_lane_pts, dtype=np.float32)[:, 0]
             single_lane_pt_y = np.array(single_lane_pts, dtype=np.float32)[:, 1]
@@ -440,34 +441,31 @@ class LaneNetPostProcessor(object):
                 fake_diff_smaller_than_zero[np.where(diff > 0)] = float('-inf')
                 idx_low = np.argmax(fake_diff_smaller_than_zero)
                 idx_high = np.argmin(fake_diff_bigger_than_zero)
-
+#
                 previous_src_pt_x = single_lane_pt_x[idx_low]
                 previous_src_pt_y = single_lane_pt_y[idx_low]
                 last_src_pt_x = single_lane_pt_x[idx_high]
                 last_src_pt_y = single_lane_pt_y[idx_high]
-#                print('\nlast_src_pt_xy')
-#                print(last_src_pt_x)
-#                print(last_src_pt_y)
-
+#
                 if previous_src_pt_y < start_plot_y or last_src_pt_y < start_plot_y or \
                         fake_diff_smaller_than_zero[idx_low] == float('-inf') or \
                         fake_diff_bigger_than_zero[idx_high] == float('inf'):
                     continue
-
+#
                 interpolation_src_pt_x = (abs(previous_src_pt_y - plot_y) * previous_src_pt_x +
                                           abs(last_src_pt_y - plot_y) * last_src_pt_x) / \
                                          (abs(previous_src_pt_y - plot_y) + abs(last_src_pt_y - plot_y))
                 interpolation_src_pt_y = (abs(previous_src_pt_y - plot_y) * previous_src_pt_y +
                                           abs(last_src_pt_y - plot_y) * last_src_pt_y) / \
                                          (abs(previous_src_pt_y - plot_y) + abs(last_src_pt_y - plot_y))
-
+#
                 if interpolation_src_pt_x > source_image_width or interpolation_src_pt_x < 5: #10:
                     continue
-
+#
                 lane_color = self._color_map[index].tolist()
                 cv2.circle(source_image, (int(interpolation_src_pt_x),
                                           int(interpolation_src_pt_y)), 5, lane_color, -1)
-#        print('postprocess 2, cost tiome : {:.5f}s'.format(time.time() - t_start))
+#        #img = Image.fromarray(morphological_ret)
         ret = {
             'mask_image': mask_image,
             'fit_params': fit_params,

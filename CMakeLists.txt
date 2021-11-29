@@ -24,6 +24,7 @@ find_package(OpenCV REQUIRED)
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
+   Curve.msg
    Lane.msg
    Lane_Image.msg
  )

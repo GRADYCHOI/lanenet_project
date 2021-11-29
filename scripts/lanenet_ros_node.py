@@ -24,7 +24,7 @@ import PIL
 from std_msgs.msg import Header
 from cv_bridge import CvBridge, CvBridgeError
 
-from lanenet_ros.msg import Lane_Image, Lane
+from lanenet_ros.msg import Lane_Image, Lane, Curve
 from local_utils.log_util import init_logger
 from local_utils.config_utils import parse_config_utils
 
@@ -50,9 +50,9 @@ class lanenet_detector():
         self.init_lanenet()
         self.bridge = CvBridge()
         sub_image = rospy.Subscriber(self.image_topic, Image, self.img_callback, queue_size=5)
-#        self.pub_image = rospy.Publisher(self.output_image, Image, queue_size=5)
+        self.pub_image = rospy.Publisher(self.output_image, Image, queue_size=5)
 #        self.pub_laneimage = rospy.Publisher(self.lane_image_topic, Lane_Image, queue_size=1)
-        self.pub_laneimage = rospy.Publisher(self.output_image, CompressedImage, queue_size=1)
+#        self.pub_laneimage = rospy.Publisher(self.output_image, CompressedImage, queue_size=1)
 #        self.pub_lane = rospy.Publisher(self.output_lane, Image, queue_size=1)
 
 
@@ -123,12 +123,12 @@ class lanenet_detector():
 #    	cv2.imshow("roi", resized_image)
 #---------------------------------------
     	#mask_image = self.postprocessing(resized_image, original_img)
-    	mask_image = self.postprocessing(resized_image, cv_image)
-    	if count % 3 == 0:
-            cv2.imwrite("/home/choiin/original_frame/%d.jpg" %num, original_img)
-            cv2.imwrite("/home/choiin/superposition_frame/%d.jpg" %num, resized_image)
-            num = num+1 
-#    	imagepublish = self.image_publish(mask_image)
+    	mask_image = self.postprocessing(resized_image, original_img)
+#    	if count % 3 == 0:
+#            cv2.imwrite("/home/choiin/original_frame/%d.jpg" %num, original_img)
+#            cv2.imwrite("/home/choiin/superposition_frame/%d.jpg" %num, resized_image)
+#            num = num+1 
+#    	image_publisher = self.image_publish(mask_image)
         
 
 
@@ -144,8 +144,8 @@ class lanenet_detector():
 #        cv2.rectangle(mask, (cX - 255, cY - 75), (cX + 255, cY + 127), 255, -1)
 #        image = cv2.bitwise_and(image, image, mask = mask)
         # ROI method 2 - cut and stretch
-        image = image[50:256, 0:512]
-        image = cv2.resize(image, (512, 256), interpolation=cv2.INTER_LINEAR)
+#        image = image[50:256, 0:512]
+#        image = cv2.resize(image, (512, 256), interpolation=cv2.INTER_LINEAR)
 
 #        cv2.imshow("image", image)
         return image
@@ -155,6 +155,10 @@ class lanenet_detector():
 				[self.binary_seg_ret, self.instance_seg_ret],
 				feed_dict={self.input_tensor: [img]}
 		) # this process 0.04~0.05s
+#        binary_seg_image = cv2.resize(binary_seg_image, (512, 206))
+#        binary_seg_image = cv2.copyMakeBorder(binary_seg_image, 50, 0, 0 ,0, cv2.BORDER_CONSTANT, value = [0,0,0])
+#        instance_seg_image = cv2.resize(instance_seg_image, (512, 206))
+#        instance_seg_image = cv2.copyMakeBorder(instance_seg_image, 50, 0, 0 ,0, cv2.BORDER_CONSTANT, value = [0,0,0])
         postprocess_result = self.postprocessor.postprocess(
             binary_seg_result=binary_seg_image[0],
             instance_seg_result=instance_seg_image[0],
@@ -162,26 +166,26 @@ class lanenet_detector():
         ) # 0.8 ~ 1.5 s
        
         mask_image = postprocess_result['mask_image']
-        mask_image = cv2.resize(mask_image, (512, 206))
-        mask_image = cv2.copyMakeBorder(mask_image, 50, 0, 0 ,0, cv2.BORDER_CONSTANT, value = [0,0,0])
+#        mask_image = cv2.resize(mask_image, (512, 206))
+#        mask_image = cv2.copyMakeBorder(mask_image, 50, 0, 0 ,0, cv2.BORDER_CONSTANT, value = [0,0,0])
         mask_image = cv2.resize(mask_image, (original_img.shape[1],
                                                 original_img.shape[0]),interpolation=cv2.INTER_LINEAR)
-
-        # binary image(2d) to 3D image
-        mask_image = mask_image.reshape([720,1280,1])
-        mask_image2 = mask_image
-        mask_image = np.append(mask_image, mask_image2, axis = 2)
-        mask_image = np.append(mask_image, mask_image2, axis = 2)
-        binary_image = mask_image.copy()
-        if count % 3 == 0 :
-            cv2.imwrite("/home/choiin/superposition_binary_frame/%d.jpg" %num, mask_image)
+#
+#        # binary image(2d) to 3D image
+#        mask_image = mask_image.reshape([720,1280,1])
+#        mask_image2 = mask_image
+#        mask_image = np.append(mask_image, mask_image2, axis = 2)
+#        mask_image = np.append(mask_image, mask_image2, axis = 2)
+#        binary_image = mask_image.copy()
+#        if count % 3 == 0 :
+#            cv2.imwrite("/home/choiin/superposition_binary_frame/%d.jpg" %num, mask_image)
         mask_image = cv2.addWeighted(original_img, 0.6, mask_image, 0.4, 0) # orgin + mask(lane)
         cv2.waitKey(1)
         #print(mask_image.shape, type(mask_image))
 #        dt_ms = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
 #        print(dt_ms)
 #        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
-        return mask_image
+#        return mask_image
 
 #        #print binary image
 #        bin_img = np.array(binary_seg_image[0]*255, np.uint8)
@@ -208,11 +212,11 @@ class lanenet_detector():
 #        self.pub_image.publish(img_msg)
 #        self.pub_image.publish(binary_image)
 
-#        return mask_image
+        return mask_image
 
 
     def image_publish(self, img):
-        self.pub_laneimage.publish(img)
+        self.pub_image.publish(img)
 
 
 
