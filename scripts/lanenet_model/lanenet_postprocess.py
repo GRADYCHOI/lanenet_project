@@ -249,22 +249,48 @@ class _LaneNetCluster(object):
             return None, None
 
         lane_coords = []
-        center_dist = 700
+        lane_dec = []
+        print("new image")
+        #print(unique_labels)
         # draw line cluster 
         for index, label in enumerate(unique_labels.tolist()):
             if label == -1:
                 continue       #label = -1 --> pass
             idx = np.where(db_labels == label)   # db label == unique label -> pixel choice  
-            print(label)
             pix_coord_idx = tuple((coord[idx][:, 1], coord[idx][:, 0]))
-            print(np.shape(pix_coord_idx)) 
-            print(len(coord[idx][:,0]))
-            print(type(coord))
-            #print(pix_coord_idx[1]) # y?
-            #print(pix_coord_idx[0]) # x?
-            #if 
-            mask[pix_coord_idx] = self._color_map[index] 
+            lane_cen_x = (coord[idx][:,0].sum())//len(coord[idx][:,0])
+            lane_cen_y = (coord[idx][:,1].sum())//len(coord[idx][:,1])
+#            print("------------------")
+#            print(len(coord[idx][:,0]))
+            self_dist = math.sqrt(math.pow((lane_cen_x - 256), 2) + math.pow((lane_cen_y - 128), 2))
+#            print(self_dist)
+            lane_dec.append(label)
+            if self_dist <= 140 and len(coord[idx][:,0]) >= 1300:
+                print(label)
+                mask[pix_coord_idx] = self._color_map[1] 
+#                print("x = ", min(coord[idx][:,0]), " , ", max(coord[idx][:,0]))
+#                print("y = ", min(coord[idx][:,1]), " , ", max(coord[idx][:,1]))
+                if max(coord[idx][:,0]) < 240:
+                    left_xmin = min(coord[idx][:,0])
+                    left_ymax = max(coord[idx][:,1])
+                    left_xmax = max(coord[idx][:,0])
+                    left_ymin = min(coord[idx][:,1])
+                elif max(coord[idx][:,0]) >=240:
+                    right_xmin = min(coord[idx][:,0])
+                    right_ymin = min(coord[idx][:,1])
+                    right_xmax = max(coord[idx][:,0])
+                    right_ymax = max(coord[idx][:,1])
+
+            else :
+                mask[pix_coord_idx] = self._color_map[2] 
+
+
+            #mask[pix_coord_idx] = self._color_map[index] 
             lane_coords.append(coord[idx])
+        pts = np.array([[left_xmin,left_ymax], [left_xmax,left_ymin],[right_xmin,right_ymin],[right_xmax,right_ymax]])
+#        cv2.polylines(mask, [pts], True, (100,100,100))
+        cv2.fillConvexPoly(mask, pts, (100,100,100))
+
 
 
         return mask, lane_coords
