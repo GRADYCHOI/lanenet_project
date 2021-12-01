@@ -167,7 +167,7 @@ class _LaneNetCluster(object):
         try:
             features = StandardScaler().fit_transform(embedding_image_feats) 
 #            print(embedding_image_feats)
-            t_start = time.time()
+            #t_start = time.time()
             db.fit(features) # consume many time
 #            print('db.fit(), cost time : {:.5f}s'.format(time.time() - t_start))
         except Exception as err:
@@ -249,13 +249,21 @@ class _LaneNetCluster(object):
             return None, None
 
         lane_coords = []
-
+        center_dist = 700
+        # draw line cluster 
         for index, label in enumerate(unique_labels.tolist()):
             if label == -1:
-                continue
-            idx = np.where(db_labels == label)
+                continue       #label = -1 --> pass
+            idx = np.where(db_labels == label)   # db label == unique label -> pixel choice  
+            print(label)
             pix_coord_idx = tuple((coord[idx][:, 1], coord[idx][:, 0]))
-            mask[pix_coord_idx] = self._color_map[index]
+            print(np.shape(pix_coord_idx)) 
+            print(len(coord[idx][:,0]))
+            print(type(coord))
+            #print(pix_coord_idx[1]) # y?
+            #print(pix_coord_idx[0]) # x?
+            #if 
+            mask[pix_coord_idx] = self._color_map[index] 
             lane_coords.append(coord[idx])
 
 
@@ -336,11 +344,16 @@ class LaneNetPostProcessor(object):
         connect_components_analysis_ret = _connect_components_analysis(image=morphological_ret)
         # c_c_a_r[0]:retval,the num of obj, [1]:labels, [2]:stats Nx5 mat, [3]:centroids
         labels = connect_components_analysis_ret[1]
+#        print(type(labels))
+#        print("labels = ", labels) 
         stats = connect_components_analysis_ret[2]
+#        print(type(stats))
+#        print("stats = ", stats)
         for index, stat in enumerate(stats):
             if stat[4] <= min_area_threshold: # area : stats[x,y,w,h,area] have 5 elements
                 idx = np.where(labels == index)
                 morphological_ret[idx] = 0  # some task to morphological_ret
+        #cv2.imshow("morph", morphological_ret)
 
         white = (255,255,255)
         cir_img = np.zeros([256,512])
@@ -363,7 +376,9 @@ class LaneNetPostProcessor(object):
             binary_seg_result=morphological_ret,
             instance_seg_result=instance_seg_result
         )
-#        print(lane_coords)
+#        print(type(lane_coords))
+#        print(type(mask_image))
+        cv2.imshow("mask", mask_image)
 
         if mask_image is None:
             return {
@@ -416,14 +431,19 @@ class LaneNetPostProcessor(object):
 
                 lane_pts.append([src_x, src_y])
 
-            src_lane_pts.append(lane_pts)
-
+            src_lane_pts.append(lane_pts) # class = list
+#        print("fit_params type = ", type(fit_params))
+#        print(np.shape(fit_params))
         # tusimple test data sample point along y axis every 10 pixels
         source_image_width = source_image.shape[1]
-#        print(src_lane_pts) # all lane points
+#        print(src_lane_pts) # all lane points, class = list
 #        print('postprocess 1, cost tiome : {:.5f}s'.format(time.time() - t_start))
 #        t_start = time.time()
+        line_count = 0
         for index, single_lane_pts in enumerate(src_lane_pts):
+            line_count += 1
+            #print("index = ", index)
+            #print("single_lane_pts = ", single_lane_pts)
             single_lane_pt_x = np.array(single_lane_pts, dtype=np.float32)[:, 0]
             single_lane_pt_y = np.array(single_lane_pts, dtype=np.float32)[:, 1]
             if data_source == 'tusimple':
@@ -465,11 +485,15 @@ class LaneNetPostProcessor(object):
                     continue
 
                 lane_color = self._color_map[index].tolist()
-                cv2.circle(source_image, (int(interpolation_src_pt_x),
-                                          int(interpolation_src_pt_y)), 5, lane_color, -1)
+                cv2.circle(source_image, (int(interpolation_src_pt_x), int(interpolation_src_pt_y)), 5, lane_color, -1)
+
+#        cv2.imshow("source", source_image)
+#        print(type(source_image))
+
 #        print('postprocess 2, cost tiome : {:.5f}s'.format(time.time() - t_start))
         ret = {
             'mask_image': mask_image,
+            'line_count': line_count,
             'fit_params': fit_params,
             'source_image': source_image,
         }

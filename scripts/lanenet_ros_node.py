@@ -93,6 +93,7 @@ class lanenet_detector():
     	global num
     	global img_np
     	global img_np2
+    	#global original_img
     	try:
     		cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
     		count += 1 
@@ -100,6 +101,9 @@ class lanenet_detector():
             print(e)
     	cv_image = cv2.resize(cv_image, (1280,720))
     	original_img = cv_image.copy()
+#    	roi_image = cv_image.copy()
+#    	roi_image = roi_image[50:256, 0:512]
+#    	roi_image = cv2.resize(roi_image, (512, 256), interpolation=cv2.INTER_LINEAR)
 #-------------origin image sup-------------
 #    	if count > 3 :
 #            cv_image = cv2.addWeighted(cv_image, 0.6, img_np, 0.5, 0)
@@ -122,8 +126,8 @@ class lanenet_detector():
     	img_np2 = copy_img.copy()
 #    	cv2.imshow("roi", resized_image)
 #---------------------------------------
-    	#mask_image = self.postprocessing(resized_image, original_img)
     	mask_image = self.postprocessing(resized_image, original_img)
+#    	mask_image = self.postprocessing(resized_image, roi_image)
 #    	if count % 3 == 0:
 #            cv2.imwrite("/home/choiin/original_frame/%d.jpg" %num, original_img)
 #            cv2.imwrite("/home/choiin/superposition_frame/%d.jpg" %num, resized_image)
@@ -139,10 +143,10 @@ class lanenet_detector():
         image = cv2.resize(img, (512, 256), interpolation=cv2.INTER_LINEAR)
         image = image / 127.5 - 1.0 #normalization
         # ROI method 1 - black box
-#        mask = np.zeros(image.shape[:2], dtype = "uint8") 
-#        (cX, cY) = (image.shape[1] // 2, image.shape[0] // 2)
-#        cv2.rectangle(mask, (cX - 255, cY - 75), (cX + 255, cY + 127), 255, -1)
-#        image = cv2.bitwise_and(image, image, mask = mask)
+        mask = np.zeros(image.shape[:2], dtype = "uint8") 
+        (cX, cY) = (image.shape[1] // 2, image.shape[0] // 2)
+        cv2.rectangle(mask, (cX - 255, cY - 75), (cX + 255, cY + 127), 255, -1)
+        image = cv2.bitwise_and(image, image, mask = mask)
         # ROI method 2 - cut and stretch
 #        image = image[50:256, 0:512]
 #        image = cv2.resize(image, (512, 256), interpolation=cv2.INTER_LINEAR)
@@ -166,6 +170,9 @@ class lanenet_detector():
         ) # 0.8 ~ 1.5 s
        
         mask_image = postprocess_result['mask_image']
+        number_line = postprocess_result['line_count']
+
+        #print("line number : ", number_line)
 #        mask_image = cv2.resize(mask_image, (512, 206))
 #        mask_image = cv2.copyMakeBorder(mask_image, 50, 0, 0 ,0, cv2.BORDER_CONSTANT, value = [0,0,0])
         mask_image = cv2.resize(mask_image, (original_img.shape[1],
@@ -183,7 +190,6 @@ class lanenet_detector():
         cv2.waitKey(1)
         #print(mask_image.shape, type(mask_image))
 #        dt_ms = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-#        print(dt_ms)
 #        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
 #        return mask_image
 
