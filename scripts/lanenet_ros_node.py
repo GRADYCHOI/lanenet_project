@@ -24,7 +24,7 @@ import PIL
 from std_msgs.msg import Header
 from cv_bridge import CvBridge, CvBridgeError
 
-from lanenet_ros.msg import Lane_Image, Lane, Curve
+from lanenet_ros.msg import Lane_Image, Lane, Curve, BoundingBox
 from local_utils.log_util import init_logger
 from local_utils.config_utils import parse_config_utils
 
@@ -41,6 +41,7 @@ roi_x = 50
 class lanenet_detector():
     def __init__(self):
         self.image_topic = rospy.get_param('~image_topic')
+        self.truck_info = rospy.get_param('~truck_info')
         self.output_image = rospy.get_param('~output_image')
         self.output_lane = rospy.get_param('~output_lane')
         self.weight_path = rospy.get_param('~weight_path')
@@ -50,6 +51,7 @@ class lanenet_detector():
         self.init_lanenet()
         self.bridge = CvBridge()
         sub_image = rospy.Subscriber(self.image_topic, Image, self.img_callback, queue_size=5)
+        sub_truck_info = rospy.Subscriber(self.truck_info, BoundingBox, self.truckbox_callback, queue_size = 5)
         self.pub_image = rospy.Publisher(self.output_image, Image, queue_size=5)
 #        self.pub_laneimage = rospy.Publisher(self.lane_image_topic, Lane_Image, queue_size=1)
 #        self.pub_laneimage = rospy.Publisher(self.output_image, CompressedImage, queue_size=1)
@@ -190,7 +192,7 @@ class lanenet_detector():
         cv2.waitKey(1)
         #print(mask_image.shape, type(mask_image))
 #        dt_ms = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-#        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
+        cv2.imshow("result_img", mask_image) # mask image ~~ -> 0.01~0.02 s
 #        return mask_image
 
 #        #print binary image
@@ -223,6 +225,10 @@ class lanenet_detector():
 
     def image_publish(self, img):
         self.pub_image.publish(img)
+
+    def truckbox_callback(self):
+        print("box~~~")
+
 
 
 

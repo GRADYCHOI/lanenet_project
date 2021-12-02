@@ -21,6 +21,12 @@ from sklearn.preprocessing import RobustScaler
 
 np.set_printoptions(threshold=np.inf)
 
+truck_end_line = 120
+prev_left_x = 0
+prev_left_y = 0
+prev_right_x = 0
+prev_right_y = 0
+
 def _morphological_process(image, kernel_size=5): # to denoise binary line
     """
     morphological process to fill the hole in the binary segmentation result
@@ -228,6 +234,7 @@ class _LaneNetCluster(object):
         :param instance_seg_result:
         :return:
         """
+        global prev_left_x, prev_right_x, prev_left_y, prev_right_y
         # get embedding feats and coords
         get_lane_embedding_feats_result = self._get_lane_embedding_feats(
             binary_seg_ret=binary_seg_result,
@@ -247,49 +254,64 @@ class _LaneNetCluster(object):
 
         if db_labels is None:
             return None, None
-
         lane_coords = []
         lane_dec = []
         print("new image")
-        #print(unique_labels)
         # draw line cluster 
         for index, label in enumerate(unique_labels.tolist()):
             if label == -1:
                 continue       #label = -1 --> pass
             idx = np.where(db_labels == label)   # db label == unique label -> pixel choice  
             pix_coord_idx = tuple((coord[idx][:, 1], coord[idx][:, 0]))
-            lane_cen_x = (coord[idx][:,0].sum())//len(coord[idx][:,0])
+            lane_cen_x = (coord[idx][:,0].sum())//len(coord[idx][:,0])  # lane average pixel make
             lane_cen_y = (coord[idx][:,1].sum())//len(coord[idx][:,1])
 #            print("------------------")
 #            print(len(coord[idx][:,0]))
             self_dist = math.sqrt(math.pow((lane_cen_x - 256), 2) + math.pow((lane_cen_y - 128), 2))
 #            print(self_dist)
             lane_dec.append(label)
-            if self_dist <= 140 and len(coord[idx][:,0]) >= 1300:
-                print(label)
-                mask[pix_coord_idx] = self._color_map[1] 
-#                print("x = ", min(coord[idx][:,0]), " , ", max(coord[idx][:,0]))
-#                print("y = ", min(coord[idx][:,1]), " , ", max(coord[idx][:,1]))
+            if self_dist <= 140 and len(coord[idx][:,0]) >= 1300:   #find left, right lane
+                #mask[pix_coord_idx] = self._color_map[1] 
                 if max(coord[idx][:,0]) < 240:
                     left_xmin = min(coord[idx][:,0])
+                    if (prev_left_x > 0) and (abs(prev_left_x - left_xmin) > 50):
+                        left_xmin = prev_left_x
+                        print("left! x")
                     left_ymax = max(coord[idx][:,1])
+                    if (prev_left_y > 0) and (abs(prev_left_y - left_xmin) > 40):
+                        left_xmin = prev_left_y
+                        print("left! y")
                     left_xmax = max(coord[idx][:,0])
                     left_ymin = min(coord[idx][:,1])
+                    prev_left_x = left_xmin
+                    prev_left_y = left_xmin
+
                 elif max(coord[idx][:,0]) >=240:
                     right_xmin = min(coord[idx][:,0])
                     right_ymin = min(coord[idx][:,1])
                     right_xmax = max(coord[idx][:,0])
+                    if (prev_right_x > 0) and (abs(prev_right_x - right_xmax) > 50):
+                        right_xmax = prev_right_x
+                        print("right x!")
                     right_ymax = max(coord[idx][:,1])
-
-            else :
-                mask[pix_coord_idx] = self._color_map[2] 
+                    if (prev_right_y > 0) and (abs(prev_right_y - right_xmax) > 40):
+                        right_xmax = prev_right_y
+                        print("right y!")
+                    prev_right_x = right_xmax
+                    prev_right_y = right_xmax
+#            else :
+#                mask[pix_coord_idx] = self._color_map[2] 
 
 
             #mask[pix_coord_idx] = self._color_map[index] 
             lane_coords.append(coord[idx])
-        pts = np.array([[left_xmin,left_ymax], [left_xmax,left_ymin],[right_xmin,right_ymin],[right_xmax,right_ymax]])
+#        pts = np.array([[left_xmin,left_ymax], [left_xmax,left_ymin],[right_xmin,right_ymin],[right_xmax,right_ymax]])
+#        pts_fill = np.array([[left_xmin,left_ymax], [left_xmin, 255], [right_xmax, right_ymax], [right_xmax, 255]])
+        pts_all = np.array([[left_xmin,left_ymax], [left_xmin, 255], [left_xmax,left_ymin],[right_xmin,right_ymin], [right_xmax, 255], [right_xmax,right_ymax]])
 #        cv2.polylines(mask, [pts], True, (100,100,100))
-        cv2.fillConvexPoly(mask, pts, (100,100,100))
+#        cv2.fillConvexPoly(mask, pts, (100,100,100))
+#        cv2.fillConvexPoly(mask, pts_fill, (100,100,100))
+        cv2.fillConvexPoly(mask, pts_all, (50,100,50))
 
 
 
@@ -404,7 +426,7 @@ class LaneNetPostProcessor(object):
         )
 #        print(type(lane_coords))
 #        print(type(mask_image))
-        cv2.imshow("mask", mask_image)
+#        cv2.imshow("mask", mask_image)
 
         if mask_image is None:
             return {
