@@ -50,8 +50,8 @@ class lanenet_detector():
 
         self.init_lanenet()
         self.bridge = CvBridge()
-#        sub_image = rospy.Subscriber(self.image_topic, Image, self.img_callback, queue_size=5)
-#        sub_truck_info = rospy.Subscriber(self.truck_info, BoundingBox, self.truckbox_callback, queue_size = 5)
+        sub_image = rospy.Subscriber(self.image_topic, Image, self.img_callback, queue_size=5)
+        sub_truck_info = rospy.Subscriber(self.truck_info, BoundingBox, self.truckbox_callback, queue_size = 5)
         self.pub_image = rospy.Publisher(self.output_image, Image, queue_size=5)
 #        self.pub_laneimage = rospy.Publisher(self.lane_image_topic, Lane_Image, queue_size=1)
 #        self.pub_laneimage = rospy.Publisher(self.output_image, CompressedImage, queue_size=1)
@@ -237,10 +237,8 @@ if __name__ == '__main__':
     # init args
     rospy.init_node('lanenet_node')
     print('\ninit_node\n')
-    Lanenet = lanenet_detector()
+    lanenet_detector()
     print('\nlanenet_detector()\n')
-    rospy.Subscriber(Lanenet.image_topic, Image, Lanenet.img_callback, queue_size=5)
-    rospy.Subscriber(Lanenet.truck_info, BoundingBox, Lanenet.truckbox_callback, queue_size = 5)
     rospy.spin()
     print('\nspin()\n')
 
