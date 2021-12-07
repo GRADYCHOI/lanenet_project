@@ -131,6 +131,11 @@ class lanenet_detector():
 #    	cv2.imshow("roi", resized_image)
 #---------------------------------------
     	mask_image = self.postprocessing(resized_image, original_img)
+#    	cv2.imwrite("/home/choiin/binary_drivable_area3/%d.jpg" %num, mask_image)
+#    	cv2.imwrite("/home/choiin/original_image3/%d.jpg" %num, cv_image)
+#    	num = num+1 
+#    	print(num) 
+
 #    	mask_image = self.postprocessing(resized_image, roi_image)
 #    	if count % 3 == 0:
 #            cv2.imwrite("/home/choiin/original_frame/%d.jpg" %num, original_img)
@@ -176,6 +181,7 @@ class lanenet_detector():
         ) # 0.8 ~ 1.5 s
        
         mask_image = postprocess_result['mask_image']
+
         number_line = postprocess_result['line_count']
 
         #print("line number : ", number_line)
@@ -236,8 +242,7 @@ class lanenet_detector():
         for i in range(box_len):
             #print(box.bounding_boxes[i].Class)
             if box.bounding_boxes[i].xmin >230 and box.bounding_boxes[i].xmax < 400:
-                if box.bounding_boxes[i].Class == "truck":
-                    truck_end = box.bounding_boxes[i].ymax
+                truck_end = box.bounding_boxes[i].ymax
 
         return truck_end
 

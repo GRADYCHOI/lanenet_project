@@ -309,7 +309,7 @@ class _LaneNetCluster(object):
             #mask[pix_coord_idx] = self._color_map[index] 
             lane_coords.append(coord[idx])
         pts_all = np.array([[left_xmin,left_ymax], [left_xmin, 255], [left_xmax,left_ymin],[right_xmin,right_ymin], [right_xmax, 255], [right_xmax,right_ymax]])
-        cv2.fillConvexPoly(mask, pts_all, (50,100,50))
+        cv2.fillConvexPoly(mask, pts_all, (255,255,255))
         black_color = (0,0,0)
         cv2.rectangle(mask,(50,0),(500,truck_end), (0,0,0), -1)
 #        cv2.imshow("mask", mask)
