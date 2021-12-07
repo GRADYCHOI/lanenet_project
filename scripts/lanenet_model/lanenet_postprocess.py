@@ -256,6 +256,7 @@ class _LaneNetCluster(object):
             return None, None
         lane_coords = []
         lane_dec = []
+        truck_end = (truck_end*416)//720
         print("new image")
         # draw line cluster 
         for index, label in enumerate(unique_labels.tolist()):
@@ -272,7 +273,7 @@ class _LaneNetCluster(object):
             lane_dec.append(label)
             if self_dist <= 140 and len(coord[idx][:,0]) >= 1300:   #find left, right lane
                 #mask[pix_coord_idx] = self._color_map[1] 
-                if max(coord[idx][:,0]) < 240:
+                if max(coord[idx][:,0]) < 240:                #find left lane
                     left_xmin = min(coord[idx][:,0])
                     if (prev_left_x > 0) and (abs(prev_left_x - left_xmin) > 50):
                         left_xmin = prev_left_x
@@ -282,18 +283,15 @@ class _LaneNetCluster(object):
                         left_xmin = prev_left_y
                         print("left! y")
                     left_xmax = max(coord[idx][:,0])
-                    #left_ymin = min(coord[idx][:,1])
-                    left_ymin = (truck_end*256)//720
-                    print((truck_end*256)//720)
-                    print(min(coord[idx][:,1]))
+                    left_ymin = min(coord[idx][:,1])
+                    #left_ymin = (truck_end*416)//720
                     prev_left_x = left_xmin
                     prev_left_y = left_xmin
 
-                elif max(coord[idx][:,0]) >=240:
+                elif max(coord[idx][:,0]) >=240:              #find right lane
                     right_xmin = min(coord[idx][:,0])
-                    #right_ymin = min(coord[idx][:,1])
-                    print(min(coord[idx][:,1]))
-                    right_ymin = (truck_end*256)//720
+                    right_ymin = min(coord[idx][:,1])
+                    #right_ymin = (truck_end*416)//720
                     right_xmax = max(coord[idx][:,0])
                     if (prev_right_x > 0) and (abs(prev_right_x - right_xmax) > 50):
                         right_xmax = prev_right_x
@@ -310,13 +308,11 @@ class _LaneNetCluster(object):
 
             #mask[pix_coord_idx] = self._color_map[index] 
             lane_coords.append(coord[idx])
-#        pts = np.array([[left_xmin,left_ymax], [left_xmax,left_ymin],[right_xmin,right_ymin],[right_xmax,right_ymax]])
-#        pts_fill = np.array([[left_xmin,left_ymax], [left_xmin, 255], [right_xmax, right_ymax], [right_xmax, 255]])
         pts_all = np.array([[left_xmin,left_ymax], [left_xmin, 255], [left_xmax,left_ymin],[right_xmin,right_ymin], [right_xmax, 255], [right_xmax,right_ymax]])
-#        cv2.polylines(mask, [pts], True, (100,100,100))
-#        cv2.fillConvexPoly(mask, pts, (100,100,100))
-#        cv2.fillConvexPoly(mask, pts_fill, (100,100,100))
         cv2.fillConvexPoly(mask, pts_all, (50,100,50))
+        black_color = (0,0,0)
+        cv2.rectangle(mask,(50,0),(500,truck_end), (0,0,0), -1)
+#        cv2.imshow("mask", mask)
 
 
 
