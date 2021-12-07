@@ -227,7 +227,7 @@ class _LaneNetCluster(object):
 
         return ret
 
-    def apply_lane_feats_cluster(self, binary_seg_result, instance_seg_result):
+    def apply_lane_feats_cluster(self, binary_seg_result, instance_seg_result, truck_end):
         """
 
         :param binary_seg_result:
@@ -282,13 +282,18 @@ class _LaneNetCluster(object):
                         left_xmin = prev_left_y
                         print("left! y")
                     left_xmax = max(coord[idx][:,0])
-                    left_ymin = min(coord[idx][:,1])
+                    #left_ymin = min(coord[idx][:,1])
+                    left_ymin = (truck_end*256)//720
+                    print((truck_end*256)//720)
+                    print(min(coord[idx][:,1]))
                     prev_left_x = left_xmin
                     prev_left_y = left_xmin
 
                 elif max(coord[idx][:,0]) >=240:
                     right_xmin = min(coord[idx][:,0])
-                    right_ymin = min(coord[idx][:,1])
+                    #right_ymin = min(coord[idx][:,1])
+                    print(min(coord[idx][:,1]))
+                    right_ymin = (truck_end*256)//720
                     right_xmax = max(coord[idx][:,0])
                     if (prev_right_x > 0) and (abs(prev_right_x - right_xmax) > 50):
                         right_xmax = prev_right_x
@@ -366,15 +371,14 @@ class LaneNetPostProcessor(object):
 
         return ret
 
-    def postprocess(self, binary_seg_result, instance_seg_result=None, ## cost time is about 0.1s
-                    min_area_threshold=100, source_image=None,
-                    data_source='tusimple'):
+    def postprocess(self, binary_seg_result, instance_seg_result=None, min_area_threshold=100, source_image=None, sub_truck_end=None, data_source='tusimple'):
         """
 
         :param binary_seg_result:
         :param instance_seg_result:
         :param min_area_threshold:
         :param source_image:
+        :param sub_truck_end:
         :param data_source:
         :return:
         """
@@ -422,7 +426,8 @@ class LaneNetPostProcessor(object):
         # apply embedding features cluster
         mask_image, lane_coords = self._cluster.apply_lane_feats_cluster(
             binary_seg_result=morphological_ret,
-            instance_seg_result=instance_seg_result
+            instance_seg_result=instance_seg_result,
+            truck_end=sub_truck_end
         )
 #        print(type(lane_coords))
 #        print(type(mask_image))

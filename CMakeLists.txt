@@ -28,6 +28,8 @@ find_package(OpenCV REQUIRED)
    Lane.msg
    Lane_Image.msg
    BoundingBox.msg
+   BoundingBoxes.msg
+
  )
 
 ## Generate added messages and services with any dependencies listed here

@@ -24,7 +24,7 @@ import PIL
 from std_msgs.msg import Header
 from cv_bridge import CvBridge, CvBridgeError
 
-from lanenet_ros.msg import Lane_Image, Lane, Curve, BoundingBoxes, BoundingBox
+from lanenet_ros.msg import Lane_Image, Lane, Curve, BoundingBox
 from local_utils.log_util import init_logger
 from local_utils.config_utils import parse_config_utils
 
@@ -34,7 +34,6 @@ LOG = init_logger.get_logger(log_file_name_prefix='lanenet_test')
 from tensorflow.python.client import device_lib
 
 count = 0
-truck_end = 0
 num = 1
 img_np = np.zeros((720,1280,3))
 img_np2 = np.zeros((720,1280,3))
@@ -42,6 +41,7 @@ roi_x = 50
 class lanenet_detector():
     def __init__(self):
         self.image_topic = rospy.get_param('~image_topic')
+        self.truck_info = rospy.get_param('~truck_info')
         self.output_image = rospy.get_param('~output_image')
         self.output_lane = rospy.get_param('~output_lane')
         self.weight_path = rospy.get_param('~weight_path')
@@ -51,8 +51,7 @@ class lanenet_detector():
         self.init_lanenet()
         self.bridge = CvBridge()
         sub_image = rospy.Subscriber(self.image_topic, Image, self.img_callback, queue_size=5)
-
-#        sub_truck = rospy.Subscriber('/darknet_ros/bounding_boxes',BoundingBoxes, self.truckbox_callback, queue_size=5)
+        sub_truck_info = rospy.Subscriber(self.truck_info, BoundingBox, self.truckbox_callback, queue_size = 5)
         self.pub_image = rospy.Publisher(self.output_image, Image, queue_size=5)
 #        self.pub_laneimage = rospy.Publisher(self.lane_image_topic, Lane_Image, queue_size=1)
 #        self.pub_laneimage = rospy.Publisher(self.output_image, CompressedImage, queue_size=1)
@@ -102,9 +101,9 @@ class lanenet_detector():
     		count += 1 
     	except CvBridgeError as e:
             print(e)
+    	sub_truck_info = rospy.Subscriber(self.truck_info, BoundingBox, self.truckbox_callback, queue_size = 5)
     	cv_image = cv2.resize(cv_image, (1280,720))
     	original_img = cv_image.copy()
-    	sub_truck_end = rospy.Subscriber('/darknet_ros/bounding_boxes',BoundingBoxes, self.truckbox_callback, queue_size=5)
 #    	roi_image = cv_image.copy()
 #    	roi_image = roi_image[50:256, 0:512]
 #    	roi_image = cv2.resize(roi_image, (512, 256), interpolation=cv2.INTER_LINEAR)
@@ -159,7 +158,6 @@ class lanenet_detector():
         return image
 
     def postprocessing(self, img, original_img):    #inference_net
-        global truck_end
         binary_seg_image, instance_seg_image = self.sess.run(
 				[self.binary_seg_ret, self.instance_seg_ret],
 				feed_dict={self.input_tensor: [img]}
@@ -171,8 +169,7 @@ class lanenet_detector():
         postprocess_result = self.postprocessor.postprocess(
             binary_seg_result=binary_seg_image[0],
             instance_seg_result=instance_seg_image[0],
-            source_image=original_img,
-            sub_truck_end=truck_end
+            source_image=original_img
         ) # 0.8 ~ 1.5 s
        
         mask_image = postprocess_result['mask_image']
@@ -230,16 +227,8 @@ class lanenet_detector():
     def image_publish(self, img):
         self.pub_image.publish(img)
 
-    def truckbox_callback(self, box):
-        global truck_end
-        box_len = len(box.bounding_boxes)
-        for i in range(box_len):
-            #print(box.bounding_boxes[i].Class)
-            if box.bounding_boxes[i].xmin >230 and box.bounding_boxes[i].xmax < 400:
-                if box.bounding_boxes[i].Class == "truck":
-                    truck_end = box.bounding_boxes[i].ymax
-
-        return truck_end
+    def truckbox_callback(self):
+        print("box~~~")
 
 
 
@@ -248,8 +237,10 @@ if __name__ == '__main__':
     # init args
     rospy.init_node('lanenet_node')
     print('\ninit_node\n')
-    lanenet_detector()
+    Lanenet = lanenet_detector()
     print('\nlanenet_detector()\n')
+#    rospy.Subscriber(Lanenet.image_topic, Image, Lanenet.img_callback, queue_size=5)
+#    rospy.Subscriber(Lanenet.truck_info, BoundingBox, Lanenet.truckbox_callback, queue_size = 5)
     rospy.spin()
     print('\nspin()\n')
 

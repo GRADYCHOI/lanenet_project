@@ -1,7 +1,6 @@
 <launch>
 
     <arg name="image_topic" default="/darknet_ros/detection_image"/>
-    <arg name="truck_info" default="/darknet_ros/bounding_boxes"/>
     <arg name="output_image" default="/lane_images"/>
     <arg name="output_lane" default="/Lane_curvature"/>
     <arg name="weight_path" default="/home/choiin/lanenet_ws/src/lanenet_ros/model/tu_1976/tu.ckpt-1976"/>
@@ -11,7 +10,6 @@
 
     <node pkg="lanenet_ros" type="lanenet_ros_node.py" name="lanenet_node" output="screen">
         <param name="image_topic" value="$(arg image_topic)" />
-        <param name="truck_info" value="$(arg truck_info)" />
         <param name="output_image" value="$(arg output_image)" />
         <param name="output_lane" value="$(arg output_lane)" />
         <param name="weight_path" value="$(arg weight_path)" />
