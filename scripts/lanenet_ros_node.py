@@ -240,8 +240,8 @@ class lanenet_detector():
         global truck_end
         box_len = len(box.bounding_boxes)
         for i in range(box_len):
-            #print(box.bounding_boxes[i].Class)
             if box.bounding_boxes[i].xmin >230 and box.bounding_boxes[i].xmax < 400:
+                print(box.bounding_boxes[i].Class)
                 truck_end = box.bounding_boxes[i].ymax
 
         return truck_end
